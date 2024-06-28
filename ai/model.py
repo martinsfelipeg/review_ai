@@ -20,12 +20,15 @@ class Gemini:
 
     def response(self, model, content):
         response = model.generate_content(content)
-        print(response.text)
+        text = response.text
+        print(text)
+
+        return text
 
 
 def main():
     extract = ReviewsExtractor()
-    prod_id = "ff29d8cb1cd0cd5ea37b80dac9939e1c"
+    prod_id = "601a360bd2a916ecef0e88de72a6531a"
 
     df = extract.read_table(product_id=prod_id)
     extract.reviews_to_txt(df)
@@ -35,7 +38,9 @@ def main():
 
     gemini = Gemini()
     model = gemini.config_model()
-    gemini.response(model, prompt)
+    text = gemini.response(model, prompt)
+
+    extract.build_report(ai_response=text)
 
 
 if __name__ == "__main__":
